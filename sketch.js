@@ -18,12 +18,24 @@ var fruty;
 
 var linkgacao;
 
-var fundoground, aguamelon, bunnelho;
+var fundoground, aguamelon, bunnelho, cuttar;
+
+var coebbit;
+
+var coeblink, coeat;
+
 
 function preload(){
   fundoground = loadImage("./Imagens/background.png");
   aguamelon = loadImage("./Imagens/melon.png");
   bunnelho = loadImage("./Imagens/Rabbit-01.png");
+  coeblink = loadAnimation("./Imagens/blink_1.png","./Imagens/blink_2.png","./Imagens/blink_3.png");
+  coeat = loadAnimation("./Imagens/eat_0.png","./Imagens/eat_1.png","./Imagens/eat_2.png",
+                        "./Imagens/eat_3.png","./Imagens/eat_4.png");
+
+  coeblink.playing = true;
+  coeat.playing = true;
+  coeat.looping = false;
 }
 
 function setup() 
@@ -31,6 +43,9 @@ function setup()
   createCanvas(500,700);
   engine = Engine.create();
   world = engine.world;
+
+  coeblink.frameDelay = 15;
+  coeat.frameDelay = 20;
  
   rectMode(CENTER);
   ellipseMode(RADIUS);
@@ -50,6 +65,18 @@ function setup()
 
   linkgacao = new LinkFruty(corda, fruty);
 
+  coebbit = createSprite(250, 620, 100, 100);
+  coebbit.addImage(bunnelho);
+  coebbit.scale = 0.2;
+  coebbit.addAnimation("piscando", coeblink);
+  coebbit.addAnimation("comendo", coeat);
+  coebbit.changeAnimation("piscando");
+
+  cuttar = createImg("./Imagens/cut_button.png");
+  cuttar.position(220, 30);
+  cuttar.size(50, 50);
+  cuttar.mouseClicked(dropar);
+
 }
 
 function draw() 
@@ -65,8 +92,15 @@ function draw()
 
   image(aguamelon,fruty.position.x, fruty.position.y, 60, 60);
 
+  drawSprites();
+
 }
 
 
+function dropar(){
 
+  corda.break();
+  linkgacao.detachar();
+  linkagacao = null;
 
+}

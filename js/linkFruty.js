@@ -15,4 +15,10 @@ class LinkFruty {
         World.add(engine.world, this.link);
     }
 
+    detachar(){
+
+        World.remove(engine.world, this.link);
+
+    }
+
 }
