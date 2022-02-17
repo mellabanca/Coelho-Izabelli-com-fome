@@ -24,6 +24,10 @@ var coebbit;
 
 var coeblink, coeat;
 
+var sadbbit;
+
+var fundoSound, cortarSound, tristeSound, comendoSound, soproSound;
+
 
 function preload(){
   fundoground = loadImage("./Imagens/background.png");
@@ -33,9 +37,18 @@ function preload(){
   coeat = loadAnimation("./Imagens/eat_0.png","./Imagens/eat_1.png","./Imagens/eat_2.png",
                         "./Imagens/eat_3.png","./Imagens/eat_4.png");
 
+  sadbbit = loadAnimation("./Imagens/sad_1.png", "./Imagens/sad_2.png", "./Imagens/sad_3.png");
+
+  fundoSound = loadSound("./Sons/sound1.mp3");
+  cortarSound = loadSound("./Sons/rope cut.mp3");
+  tristeSound = loadSound("./Sons/sad.wav");
+  comendoSound = loadSound("./Sons/eating_sound.mp3");
+  soproSound = loadSound("./Sons/air.wav");
+
   coeblink.playing = true;
   coeat.playing = true;
   coeat.looping = false;
+  sadbbit.looping = false;
 }
 
 function setup() 
@@ -70,6 +83,7 @@ function setup()
   coebbit.scale = 0.2;
   coebbit.addAnimation("piscando", coeblink);
   coebbit.addAnimation("comendo", coeat);
+  coebbit.addAnimation("triste", sadbbit);
   coebbit.changeAnimation("piscando");
 
   cuttar = createImg("./Imagens/cut_button.png");
@@ -90,7 +104,20 @@ function draw()
 
   corda.show();
 
-  image(aguamelon,fruty.position.x, fruty.position.y, 60, 60);
+  if(fruty !== null){  
+
+    image(aguamelon,fruty.position.x, fruty.position.y, 60, 60);
+  }
+
+  if(colideu(fruty, coebbit) === true){
+
+    coebbit.changeAnimation("comendo");
+  }
+
+  if(colideu(fruty, ground.body) === true){
+
+    coebbit.changeAnimation("triste");
+  }
 
   drawSprites();
 
@@ -103,4 +130,20 @@ function dropar(){
   linkgacao.detachar();
   linkagacao = null;
 
+}
+
+function colideu(body, sprite){
+
+  if(body !== null){
+    var didy = dist(body.position.x, body.position.y, sprite.position.x, sprite.position.y);
+    if(didy <= 80){
+      World.remove(engine.world, fruty);
+      fruty = null;
+      return true;
+
+    } else{
+      return false;
+
+    }
+  }
 }
